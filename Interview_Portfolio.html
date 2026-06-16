@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tricia Scully, Data Science Portfolio</title>
+<style>
+:root{
+  --ink:#121212; --muted:#5a5a5a; --faint:#8e8e8e;
+  --rule:#e2e2e2; --rule2:#cfcfcf; --bg:#ffffff; --bg-alt:#f6f5f2; --bg-dark:#1c1c1c;
+  --blue:#1a476f; --blue2:#3a78a8; --accent:#d56a1f; --red:#b8242a; --green:#3f7d51; --plum:#7a3b69;
+  --serif:Georgia,'Times New Roman',Times,serif;
+  --sans:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  --maxw:720px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4,.serif{font-family:var(--serif);font-weight:700;line-height:1.15;}
+a{color:var(--blue);}
+img{max-width:100%;}
+
+/* reading progress */
+#progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;z-index:200;transition:width .1s linear;}
+
+/* nav */
+nav.top{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:saturate(180%) blur(6px);border-bottom:1px solid var(--rule);}
+nav.top .wrap{max-width:1040px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:10px 20px;flex-wrap:wrap;}
+nav.top .brand{font-family:var(--serif);font-weight:700;font-size:18px;letter-spacing:-.2px;margin-right:auto;}
+nav.top a.navlink{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);text-decoration:none;padding:4px 2px;border-bottom:2px solid transparent;}
+nav.top a.navlink:hover,nav.top a.navlink.active{color:var(--ink);border-bottom-color:var(--accent);}
+
+/* layout */
+.container{max-width:1040px;margin:0 auto;padding:0 20px;}
+.reading{max-width:var(--maxw);margin:0 auto;padding:0 20px;}
+section{padding:64px 0;border-top:1px solid var(--rule);}
+section:first-of-type{border-top:none;}
+.kicker{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);font-weight:700;margin:0 0 10px;}
+.section-title{font-size:34px;margin:0 0 8px;letter-spacing:-.5px;}
+.section-dek{font-size:18px;color:var(--muted);font-family:var(--serif);font-style:italic;margin:0 0 28px;max-width:640px;}
+
+/* hero */
+.hero{background:var(--bg);padding:70px 0 40px;border:none;}
+.hero .eyebrow{font-size:13px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:700;margin-bottom:18px;}
+.hero h1{font-size:64px;letter-spacing:-1.5px;margin:0 0 14px;}
+.hero .sub{font-family:var(--serif);font-size:24px;font-style:italic;color:var(--muted);margin:0 0 22px;line-height:1.3;}
+.hero .byline{font-size:13px;color:var(--faint);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:12px 0;letter-spacing:.02em;text-align:center;}
+.hero .byline b{color:var(--ink);font-weight:700;}
+@media(max-width:680px){.hero h1{font-size:42px;}.section-title{font-size:26px;}}
+
+/* stat strip */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--rule);}
+.stat{padding:22px 18px;border-right:1px solid var(--rule);}
+.stat:last-child{border-right:none;}
+.stat .num{font-family:var(--serif);font-size:40px;font-weight:700;letter-spacing:-1px;line-height:1;color:var(--blue);}
+.stat .lab{font-size:12.5px;color:var(--muted);margin-top:8px;letter-spacing:.02em;}
+@media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr);}.stat:nth-child(2){border-right:none;}.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--rule);}}
+
+/* timeline */
+.timeline{position:relative;margin-top:10px;}
+.trole{display:grid;grid-template-columns:130px 1fr;gap:20px;padding:18px 0;border-top:1px solid var(--rule);cursor:default;}
+.trole:hover{background:var(--bg-alt);}
+.trole .yr{font-family:var(--serif);font-weight:700;color:var(--accent);font-size:15px;}
+.trole .org{font-weight:700;font-size:17px;margin:0 0 3px;}
+.trole .titlerole{font-size:13px;color:var(--muted);margin:0 0 6px;text-transform:uppercase;letter-spacing:.06em;}
+.trole .desc{font-size:15px;color:var(--ink);}
+.trole.flag .org::after{content:"★ current";font-size:10px;color:#fff;background:var(--accent);padding:2px 7px;border-radius:10px;margin-left:10px;vertical-align:middle;letter-spacing:.05em;text-transform:uppercase;font-family:var(--sans);}
+
+/* pipeline stepper */
+.pipe{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 24px;}
+.pchip{flex:1 1 120px;min-width:120px;border:1px solid var(--rule2);border-radius:4px;padding:12px 12px;cursor:pointer;background:#fff;transition:.18s;text-align:left;}
+.pchip:hover{border-color:var(--blue);}
+.pchip.active{background:var(--blue);border-color:var(--blue);color:#fff;}
+.pchip .pn{font-family:var(--serif);font-size:13px;font-weight:700;opacity:.6;}
+.pchip .pt{font-size:13.5px;font-weight:700;margin-top:3px;line-height:1.2;}
+.pdetail{border-left:3px solid var(--accent);background:var(--bg-alt);padding:18px 22px;font-size:16px;min-height:90px;}
+.pdetail .ptag{display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:700;margin-bottom:6px;}
+.pdetail b{color:var(--blue);}
+
+/* project story cards */
+.story{border:1px solid var(--rule);margin:26px 0;background:#fff;}
+.story .head{padding:22px 26px 18px;border-bottom:1px solid var(--rule);}
+.story .tag{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:#fff;background:var(--blue);padding:3px 9px;border-radius:3px;display:inline-block;margin-bottom:12px;}
+.story .tag.exp{background:var(--accent);}
+.story .tag.ml{background:var(--plum);}
+.story .tag.causal{background:var(--green);}
+.story h3{font-size:25px;margin:0 0 6px;letter-spacing:-.4px;}
+.story .role{font-size:12.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;}
+.story .body{padding:22px 26px;display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+@media(max-width:760px){.story .body{grid-template-columns:1fr;}}
+.qa{margin:0 0 16px;}
+.qa .q{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--accent);font-weight:700;margin-bottom:4px;}
+.qa .a{font-size:15.5px;color:var(--ink);}
+.qa .a b{color:var(--blue);}
+.viz-wrap{background:var(--bg-alt);border:1px solid var(--rule);padding:18px;}
+.viz-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px;}
+.viz-cap{font-size:13px;color:var(--faint);font-family:var(--serif);font-style:italic;margin-top:10px;line-height:1.4;}
+
+/* css bar charts */
+.barrow{display:flex;align-items:center;gap:10px;margin:12px 0;}
+.barrow .blab{width:120px;font-size:13px;text-align:right;color:var(--muted);flex-shrink:0;}
+.bartrack{flex:1;background:#eceae5;height:26px;position:relative;border-radius:2px;overflow:hidden;}
+.barfill{height:100%;width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1);}
+.barval{font-family:var(--serif);font-weight:700;font-size:14px;width:62px;flex-shrink:0;}
+
+/* diverging */
+.dvrow{display:grid;grid-template-columns:130px 1fr;gap:10px;align-items:center;margin:10px 0;font-size:13px;}
+.dvbar{height:22px;border-radius:2px;width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1);display:flex;align-items:center;color:#fff;font-weight:700;font-size:12px;padding:0 8px;font-family:var(--sans);}
+
+/* big number callouts */
+.bignums{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.bignums .bn{background:#fff;padding:16px;}
+.bignums .bn .v{font-family:var(--serif);font-size:30px;font-weight:700;color:var(--blue);letter-spacing:-1px;}
+.bignums .bn .l{font-size:12px;color:var(--muted);margin-top:4px;}
+
+/* svg chart */
+.svgchart{width:100%;height:auto;display:block;}
+.svgchart text{font-family:var(--sans);}
+.lgnd{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:12.5px;color:var(--muted);}
+.lgnd span{display:inline-flex;align-items:center;gap:6px;}
+.lgnd i{width:14px;height:3px;display:inline-block;border-radius:2px;}
+
+/* STAR expander */
+.star{border-top:1px dashed var(--rule2);padding:16px 26px;background:#fbfaf8;}
+.star summary{cursor:pointer;font-size:12px;text-transform:uppercase;letter-spacing:.09em;font-weight:700;color:var(--accent);list-style:none;}
+.star summary::-webkit-details-marker{display:none;}
+.star summary::before{content:"▸ ";}
+.star[open] summary::before{content:"▾ ";}
+.star .starbody{margin-top:14px;font-size:15px;}
+.star .starbody p{margin:8px 0;}
+.star .starbody .lbl{font-family:var(--serif);font-weight:700;color:var(--blue);font-style:italic;margin-right:6px;}
+.star .pressed{margin-top:12px;font-size:13.5px;color:var(--muted);border-left:3px solid var(--rule2);padding-left:12px;}
+
+/* technical deep-dive */
+.deep{border-top:1px dashed var(--rule2);padding:16px 26px;background:#fcfbf9;}
+.deep summary{cursor:pointer;font-size:12px;text-transform:uppercase;letter-spacing:.09em;font-weight:700;color:var(--blue);list-style:none;}
+.deep summary::-webkit-details-marker{display:none;}
+.deep summary::before{content:"▸ ";}
+.deep[open] summary::before{content:"▾ ";}
+.deep h5{font-family:var(--sans);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin:18px 0 6px;font-weight:700;}
+.deep p{font-size:14.5px;margin:6px 0;color:var(--ink);}
+.deep pre{background:#11161f;color:#e6edf3;border-radius:6px;padding:14px 16px;overflow-x:auto;font-size:12px;line-height:1.55;margin:6px 0;}
+.deep pre code{font-family:'SF Mono',Menlo,Consolas,monospace;white-space:pre;}
+.deep .mathbox{background:var(--bg-alt);border-left:3px solid var(--blue);padding:10px 14px;font-size:14px;margin:6px 0;}
+.deep .mathbox code,.deep .mono{font-family:'SF Mono',Menlo,Consolas,monospace;font-size:13px;}
+.deep .caveat{font-size:12.5px;color:var(--faint);font-style:italic;margin-top:10px;}
+.deep .real{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--green);padding:2px 7px;border-radius:3px;margin-left:8px;vertical-align:middle;}
+.deep .repr{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:#9aa7b1;padding:2px 7px;border-radius:3px;margin-left:8px;vertical-align:middle;}
+.deep .runorder{font-size:13px;color:var(--muted);margin:4px 0 8px;}
+.deep .runorder b{color:var(--blue);}
+.deep pre .c-kw{color:#79c0ff;}
+.deep pre .c-str{color:#a5d6a7;}
+.deep pre .c-com{color:#8b98a9;font-style:italic;}
+.deep pre .c-num{color:#f0b86e;}
+.deep pre .c-fn{color:#d2a8ff;}
+
+/* filter chips */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.fbtn{font-size:12.5px;border:1px solid var(--rule2);background:#fff;border-radius:20px;padding:6px 14px;cursor:pointer;color:var(--muted);letter-spacing:.02em;}
+.fbtn:hover{border-color:var(--blue);color:var(--ink);}
+.fbtn.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+/* matrix */
+.matrix{border:1px solid var(--rule);}
+.mrow{display:grid;grid-template-columns:230px 1fr;gap:0;border-top:1px solid var(--rule);}
+.mrow:first-child{border-top:none;}
+.mrow .mt{padding:14px 16px;font-weight:700;font-size:14px;background:var(--bg-alt);border-right:1px solid var(--rule);}
+.mrow .mc{padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.proj-chip{font-size:12.5px;background:#fff;border:1px solid var(--rule2);border-radius:3px;padding:4px 9px;color:var(--ink);}
+.proj-chip b{color:var(--blue);}
+@media(max-width:680px){.mrow{grid-template-columns:1fr;}.mrow .mt{border-right:none;}}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.in{opacity:1;transform:none;}
+
+/* footer */
+footer{background:var(--bg-dark);color:#e8e8e8;padding:50px 0;border:none;}
+footer .container{max-width:760px;}
+footer h3{color:#fff;font-size:24px;margin:0 0 14px;}
+footer p{color:#bdbdbd;font-size:15px;}
+.pill{display:inline-block;background:#2c2c2c;border:1px solid #3a3a3a;border-radius:20px;padding:6px 13px;font-size:12.5px;margin:5px 6px 0 0;color:#e8e8e8;}
+.note{font-size:13px;color:var(--faint);font-style:italic;font-family:var(--serif);margin-top:8px;}
+.dropcap::first-letter{font-family:var(--serif);font-size:58px;line-height:.8;float:left;padding:4px 8px 0 0;font-weight:700;color:var(--ink);}
+hr.thin{border:none;border-top:1px solid var(--rule);margin:30px 0;}
+.callout{border-left:3px solid var(--blue);background:var(--bg-alt);padding:14px 18px;font-size:15px;margin:18px 0;}
+.callout b{color:var(--blue);}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<nav class="top">
+  <div class="wrap">
+    <span class="brand">Tricia&nbsp;Scully</span>
+    <a class="navlink" href="#experiments">Experiments</a>
+    <a class="navlink" href="#ml">ML &amp; Forecasting</a>
+    <a class="navlink" href="#matrix">Skills Matrix</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="reading">
+    <div class="eyebrow">An Interactive Data Science Portfolio</div>
+    <h1>Taking projects from hypothesis to production.</h1>
+    <p class="sub">A decade+ of turning messy data into decisions teams actually act on. Built to be explored, not just read.</p>
+<!--    <div class="byline"><b>Tricia Scully</b> &nbsp; Data Scientist &nbsp;</div> -->
+  </div>
+</header>
+
+<!-- EXPERIMENTS -->
+<section id="experiments">
+  <div class="container reveal">
+    <p class="kicker">Experimentation</p>
+    <h2 class="section-title">Tests run, debugged, and productionized</h2>
+    <p class="section-dek">Validating product hypotheses, optimizing conversion funnels, and catching invalid tests: classic A/B, a causal quasi-experiment, and an adaptive bandit deployed as a live service.</p>
+  </div>
+
+  <!-- CONTENT RECOMMENDER -->
+  <div class="container reveal">
+    <article class="story">
+      <div class="head">
+        <span class="tag ml">Recommender · Built &amp; Productionized</span>
+        <h3>Content Recommendation Engine</h3>
+        <p class="role">Gannett · co-occurrence / item-item collaborative filtering</p>
+      </div>
+      <div class="body">
+        <div>
+          <div class="qa"><div class="q">The goal</div><div class="a">Surface the next piece of content a reader is most likely to engage with, which deepens sessions and drives subscriptions.</div></div>
+          <div class="qa"><div class="q">What we built</div><div class="a">A content-recommendation module from scratch on a <b>co-occurrence matrix</b>, an item-item collaborative-filtering method that learns "what content gets consumed together," then ranks recommendations from those associations.</div></div>
+          <div class="qa"><div class="q">Why this approach</div><div class="a">Co-occurrence is <b>transparent, fast, and cold-start-friendly</b> for a content catalog, with no heavy training loop, and it explains <i>why</i> something was recommended.</div></div>
+          <div class="qa"><div class="q">To production</div><div class="a">We shipped it as a deployed module, not a notebook demo. And the core move, turning co-occurrence into a <b>ranked list</b>, which is exactly the shape of a <b>search-ranking or client–provider matching</b> problem.</div></div>
+        </div>
+        <div>
+          <div class="viz-wrap">
+            <div class="viz-title">Item-item co-occurrence matrix</div>
+            <div id="cooc"></div>
+            <div class="viz-cap">Darker cells = content consumed together more often. Each row's strongest off-diagonal cells become that item's recommendations.</div>
+          </div>
+        </div>
+      </div>
+      <details class="deep"><summary>Technical deep-dive: math, SQL &amp; Python<span class="repr">representative</span></summary>
+        <div>
+          <h5>The math</h5>
+          <p class="mathbox">Co-occurrence <span class="mono">C(i,j)</span> = number of sessions containing both items <span class="mono">i</span> and <span class="mono">j</span>. Raw counts over-reward popular items, so we normalize, e.g. cosine: <span class="mono">sim(i,j) = C(i,j) / √(C(i,i)·C(j,j))</span>, or lift: <span class="mono">C(i,j)·N / (C(i)·C(j))</span>. Recommendations for <span class="mono">i</span> = the top-k items by <span class="mono">sim</span>, excluding <span class="mono">i</span>.</p>
+          <h5>SQL: build the co-occurrence counts</h5>
+          <pre><code>WITH session_items AS (              -- one row per (session, item)
+  SELECT session_id, content_id
+  FROM page_views
+  GROUP BY session_id, content_id
+)
+SELECT a.content_id AS item_i,
+       b.content_id AS item_j,
+       COUNT(*)     AS cooccur
+FROM session_items a
+JOIN session_items b
+  ON a.session_id = b.session_id
+ AND a.content_id &lt; b.content_id     -- unordered pairs, drop self-pairs
+GROUP BY item_i, item_j
+HAVING COUNT(*) &gt;= 5;                 -- prune noisy one-offs</code></pre>
+          <h5>Python: normalize &amp; rank</h5>
+          <pre><code>import numpy as np
+from scipy.sparse import csr_matrix
+
+# C = sparse item x item co-occurrence (symmetric)
+diag = np.sqrt(C.diagonal())
+sim  = C.multiply(1/diag[:, None]).multiply(1/diag[None, :])   # cosine-normalize
+
+def recommend(i, k=10):
+    row = np.asarray(sim.getrow(i).todense()).ravel()
+    row[i] = 0                          # never recommend the item itself
+    return np.argsort(-row)[:k]         # top-k most-associated items</code></pre>
+          <h5>Why it's advanced / how it's tested</h5>
+          <p>Sparse matrix math at catalog scale, a deliberate <b>normalization choice</b> to fight popularity bias, and a <b>cold-start fallback</b> to a popularity prior for new items. Evaluated offline with <b>Recall@K / NDCG</b>, then validated online with a CTR/engagement A/B test, the same ranking shape as a search or client–provider matching problem.</p>
+          <p class="caveat">Representative reconstruction. The production module was built at Gannett, and the code stayed there.</p>
+        </div>
+      </details>
+    </article>
+  </div>
+
+  <!-- BANDIT -->
+  <div class="container reveal">
+    <article class="story">
+      <div class="head">
+        <span class="tag exp">Adaptive Experimentation · Production</span>
+        <h3>Multi-Armed Bandit → Live Allocation API</h3>
+        <p class="role">Gannett · Thompson Sampling · Google Cloud Function</p>
+      </div>
+      <div class="body">
+        <div>
+          <div class="qa"><div class="q">The problem</div><div class="a">Fixed-split A/B tests keep sending half the traffic to a variant we already suspect is losing. That opportunity cost <i>is</i> regret.</div></div>
+          <div class="qa"><div class="q">What we did</div><div class="a">Compared <b>ε-greedy, UCB, and Thompson Sampling</b>; chose Thompson Sampling and deployed it pulling live GA4 data from BigQuery, serving allocations through a Dockerized Cloud Function.</div></div>
+          <div class="qa"><div class="q">Why this model</div><div class="a">The true conversion rate of each variant is unknown, so we model each one as a <b>probability distribution</b> (a Beta distribution) that sharpens with every conversion or miss. To allocate the next users, the algorithm draws a random sample from each variant's distribution and sends traffic to whichever sampled highest. Variants that are still uncertain keep getting chances (<b>exploration</b>); proven winners get the bulk of traffic (<b>exploitation</b>), and it self-corrects automatically as data arrives, with no hand-tuned "explore X% of the time" knob like ε-greedy. "Beta-Binomial" just means the math updates instantly in closed form.</div></div>
+          <div class="qa"><div class="q">How it was measured &amp; guard-railed</div><div class="a">We tracked <b>cumulative regret</b>, meaning how many conversions the bandit gave up versus always picking the true best variant. But a bandit can over-react to a lucky early streak, so we never let it run unchecked: we still ran a real <b>significance test</b> (two-proportion z-test at 95%), confirmed there was <b>enough traffic to detect a real difference</b> (power analysis), and reported <b>uncertainty ranges</b> (credible intervals). So every shift in allocation was backed by evidence, not early noise.</div></div>
+        </div>
+        <div>
+          <div class="viz-wrap">
+            <div class="viz-title">Posterior sampling → allocation</div>
+            <svg class="svgchart" id="betaChart" viewBox="0 0 600 230" aria-label="Two posterior distributions"></svg>
+            <div class="lgnd"><span><i style="background:#9aa7b1"></i>Control posterior</span><span><i style="background:var(--blue)"></i>Variant&nbsp;B posterior</span></div>
+            <div class="viz-cap">Each draw picks the arm with the higher sampled rate. As evidence accumulates, B's posterior separates and wins more draws → more traffic.</div>
+          </div>
+          <div class="viz-wrap" style="margin-top:14px;">
+            <div class="viz-title">Traffic allocation over the test</div>
+            <svg class="svgchart" id="allocChart" viewBox="0 0 600 200" aria-label="Allocation over time"></svg>
+            <div class="lgnd"><span><i style="background:var(--blue)"></i>Variant B</span><span><i style="background:#9aa7b1"></i>Control</span></div>
+            <div class="viz-cap">Note the shape: early on the posteriors are wide and overlapping, so allocation <b>swings hard</b> from update to update. As data accumulates the swings <b>dampen and converge</b> on the winning split (~80/20). It hones in, rather than ramping in a straight line.</div>
+          </div>
+        </div>
+      </div>
+      <details class="deep"><summary>Technical deep-dive: math, SQL &amp; Python<span class="real">real code</span></summary>
+        <div>
+          <h5>The math</h5>
+          <p class="mathbox">Model each variant's true conversion rate <span class="mono">θ</span> as <span class="mono">Beta(α, β)</span>. The Beta is conjugate to the Bernoulli, so after <span class="mono">s</span> conversions and <span class="mono">f</span> misses the posterior is just <span class="mono">Beta(1+s, 1+f)</span>, a closed-form update with no MCMC. Each round, one sample is drawn from each arm's posterior, routing the next users to <span class="mono">argmaxₖ θ̃ₖ</span>. Regret = <span class="mono">Σ (θ* − θ_chosen)</span>.</p>
+          <h5>SQL: pull impressions &amp; conversions per variant (GA4 / BigQuery)</h5>
+          <pre><code>SELECT d190_page_ab_variant AS variant,
+       COUNT(DISTINCT user_id) AS impressions,
+       COUNT(DISTINCT IF(first_transaction_flag = 1
+             AND d001_event_type LIKE '%product-purchase%',
+             user_id, NULL)) AS conversions
+FROM `gannett-bi-reporting...ga4_events_extracted_transformed`
+WHERE d190_page_ab_variant IN ('0066_LPRB_A', '0066_LPRB_B')
+  AND DATE(TIMESTAMP_MICROS(event_timestamp)) BETWEEN @start AND @end
+GROUP BY variant;</code></pre>
+          <h5>Python: posterior sampling → traffic allocation</h5>
+          <p class="runorder"><b>Run order:</b> the SQL above yields <span class="mono">(conversions, impressions)</span> per variant → load into <span class="mono">arms</span> → sample each posterior → allocate traffic by win-share.</p>
+          <pre><code>import numpy as np
+N = 10_000
+# one posterior per arm: Beta(1 + conversions, 1 + non-conversions)
+samples = {v: np.random.beta(s + 1, f + 1, N) for v, (s, f) in arms.items()}
+
+wins = np.zeros(len(arms))
+for i in range(N):                      # Monte-Carlo over the draws
+    draws = [samples[v][i] for v in arms]
+    wins[np.argmax(draws)] += 1         # arm that "wins" this draw
+alloc = {v: round(100 * wins[k] / N) for k, v in enumerate(arms)}  # % traffic</code></pre>
+          <h5>Python: the guardrails (statsmodels)</h5>
+          <pre><code>from statsmodels.stats.proportion import proportions_ztest, proportion_confint
+from statsmodels.stats.power import NormalIndPower
+
+stat, p = proportions_ztest(conversions, impressions)      # is the lift real?
+NormalIndPower().solve_power(effect_size=None, nobs1=n,     # did we have power?
+                             alpha=0.05, power=0.8, alternative='two-sided')
+ci = proportion_confint(conv_b, imp_b, alpha=0.05, method='normal')  # uncertainty</code></pre>
+          <h5>Why it's advanced / how it's tested</h5>
+          <p>Conjugate Bayesian updating (closed-form, cheap to run every cycle), Monte-Carlo allocation, an impression→conversion delay window, and deployment as a Dockerized Cloud Function API. Tested by tracking <b>cumulative regret</b> against the always-best arm, fenced by the z-test / power / credible-interval guardrails so allocation never chases early noise.</p>
+          <p class="caveat">Condensed and lightly cleaned from the deployed Gannett module (<span class="mono">Thompson_Sampling.py</span> + the GA4 allocation query).</p>
+        </div>
+      </details>
+    </article>
+  </div>
+
+  <!-- EDM-1257 -->
+  <div class="container reveal">
+    <article class="story">
+      <div class="head">
+        <span class="tag">Validity QA · "The Broken Test"</span>
+        <h3>Catching an Invalid Test</h3>
+        <p class="role">Gannett · EDM-1257 · sample-composition confound</p>
+      </div>
+      <div class="body">
+        <div>
+          <div class="qa"><div class="q">The trap</div><div class="a">A landing-page redesign read as an 18% CVR win, but the funnel was off: far more new-page users hit account creation, even though final starts matched.</div></div>
+          <div class="qa"><div class="q">What we found</div><div class="a">The test fed a much higher share of <b>already-registered</b> users to the <i>old</i> page (≈32% vs ≈6%). Registered users skip account creation, distorting the step-to-step comparison.</div></div>
+          <div class="qa"><div class="q">Why it matters</div><div class="a">A <b>sample-composition / Simpson's-paradox</b> problem, not real behavior. The new page's win was actually <i>understated</i>, since it got more low-intent users and still won.</div></div>
+          <div class="qa"><div class="q">Result</div><div class="a">Recommended rebalancing samples with engineering and continuing the test, which prevented a wrong call from a broken setup.</div></div>
+        </div>
+        <div>
+          <div class="viz-wrap">
+            <div class="viz-title">% already-registered of roadblock clicks</div>
+            <div class="barrow"><div class="blab">New page</div><div class="bartrack"><div class="barfill" data-w="20" style="background:var(--blue)"></div></div><div class="barval">6.4%</div></div>
+            <div class="barrow"><div class="blab">Old page</div><div class="bartrack"><div class="barfill" data-w="100" style="background:var(--red)"></div></div><div class="barval">31.7%</div></div>
+            <div class="viz-cap">The imbalance that explained the "uneven funnel." Always check sample composition before trusting a headline lift.</div>
+          </div>
+          <div class="callout" style="margin-top:14px;"><b>The lesson worth drawing:</b> a sample-ratio (SRM) check belongs <i>in the pipeline</i>, automated, before anyone reads the result.</div>
+        </div>
+      </div>
+      <details class="deep"><summary>Technical deep-dive: math, SQL &amp; Python<span class="repr">representative</span></summary>
+        <div>
+          <h5>The math</h5>
+          <p class="mathbox">A <b>sample-ratio mismatch (SRM)</b> check is a chi-square goodness-of-fit test against the intended split: <span class="mono">χ² = Σ (observed − expected)² / expected</span>. A tiny p-value means the randomization is broken. Then compare <b>group composition</b> (here, the share of already-registered users), because an imbalanced mix, not behavior, can move a step-level funnel rate (Simpson's paradox).</p>
+          <h5>SQL: registered share by landing page</h5>
+          <pre><code>SELECT landing_page,
+       COUNTIF(user_status = 'registered') AS reg,
+       COUNTIF(user_status = 'anonymous')  AS anon,
+       SAFE_DIVIDE(COUNTIF(user_status = 'registered'), COUNT(*)) AS pct_registered
+FROM roadblock_clicks
+GROUP BY landing_page;
+-- new page: 6.4% registered   |   old page: 31.7% registered</code></pre>
+          <h5>Python: the SRM gate</h5>
+          <pre><code>from scipy.stats import chisquare
+# observed exposures vs the intended 50/50
+stat, p = chisquare(f_obs=[n_new, n_old], f_exp=[(n_new+n_old)/2]*2)
+assert p &gt; 0.001, "Sample-ratio mismatch; investigate before trusting the read"</code></pre>
+          <h5>Why it's advanced / how it's tested</h5>
+          <p>The headline said "+18% CVR win"; the funnel said otherwise. Diagnosing it as a <b>composition</b> problem (registered users skip account creation), rather than accepting or rejecting the result, showed the new page was actually <i>understated</i>. The takeaway: an SRM check belongs <b>in the pipeline as an automated gate</b>, before anyone reads a result.</p>
+          <p class="caveat">Representative reconstruction; the 6.4% vs 31.7% composition split is the real finding.</p>
+        </div>
+      </details>
+    </article>
+  </div>
+
+  <!-- HP4U -->
+  <div class="container reveal">
+    <article class="story">
+      <div class="head">
+        <span class="tag">Metrics Tradeoff · Confounder</span>
+        <h3>Recommender Test: Engagement vs. Subscriptions</h3>
+        <p class="role">Gannett · HP4U / Taboola · EXP-0035</p>
+      </div>
+      <div class="body">
+        <div>
+          <div class="qa"><div class="q">The test</div><div class="a">Taboola's personalized homepage vs. our standard homepage, ramped to 80% of audience.</div></div>
+          <div class="qa"><div class="q">The confounder we found</div><div class="a">Top-line pages/session looked <i>down</i>, but <b>auto-refresh pageviews</b> were inflating the control. Removing them, the variant actually had higher real page depth.</div></div>
+          <div class="qa"><div class="q">How it was framed</div><div class="a">An explicit tradeoff across ad revenue, CTR, story pageviews, and subscriptions, not a single up-or-down verdict.</div></div>
+          <div class="qa"><div class="q">Result</div><div class="a"><b>+48% homepage CTR</b>, ~<b>+8% downstream ad revenue (~$864K/yr)</b> against a ~<b>5% subscription dip</b>. Leadership could weigh the tradeoff with eyes open.</div></div>
+        </div>
+        <div>
+          <div class="viz-wrap">
+            <div class="viz-title">Variant impact vs. control</div>
+            <div class="dvrow"><div>Homepage CTR</div><div><div class="dvbar" data-w="100" style="background:var(--green)">+48%</div></div></div>
+            <div class="dvrow"><div>Story pageviews</div><div><div class="dvbar" data-w="62" style="background:var(--green)">+30%</div></div></div>
+            <div class="dvrow"><div>Ad revenue</div><div><div class="dvbar" data-w="20" style="background:var(--green)">+8%</div></div></div>
+            <div class="dvrow"><div>Subscriptions</div><div><div class="dvbar" data-w="13" style="background:var(--red)">−5%</div></div></div>
+            <div class="viz-cap">A recommender <i>evaluation</i> (not a build): quantify both sides so the revenue tradeoff is an informed decision.</div>
+          </div>
+        </div>
+      </div>
+      <details class="deep"><summary>Technical deep-dive: math, SQL &amp; Python<span class="repr">representative</span></summary>
+        <div>
+          <h5>The math</h5>
+          <p class="mathbox">The trap: total pageviews mix two populations: real reads and <b>auto-refresh</b> impressions. Decompose first: <span class="mono">pv_total = pv_real + pv_autorefresh</span>, then run the z-test on <span class="mono">pv_real</span>. Each KPI gets its own significance test; the decision is a multi-metric tradeoff, not one number.</p>
+          <h5>SQL: strip the confounder before comparing</h5>
+          <pre><code>SELECT variant,
+       SUM(pageviews)                               AS pv_total,
+       SUM(IF(is_auto_refresh, pageviews, 0))       AS pv_autorefresh,
+       SUM(IF(is_auto_refresh, 0, pageviews))       AS pv_real,
+       SUM(ad_revenue)                              AS ad_rev,
+       COUNT(DISTINCT IF(subscribed, user_id, NULL)) AS subs
+FROM homepage_sessions
+GROUP BY variant;</code></pre>
+          <h5>Python: per-metric significance + tradeoff</h5>
+          <pre><code>from statsmodels.stats.proportion import proportions_ztest
+for metric in ['ctr', 'pv_real', 'subs']:
+    z, p = proportions_ztest(num[metric], den[metric])
+    flag = 'sig@95' if p &lt; 0.05 else ('sig@90' if p &lt; 0.10 else 'n.s.')
+    print(metric, round(p, 4), flag)        # 90%-only flagged as elevated risk
+ann_ad_rev = (ad_rev_var - ad_rev_ctrl) / weeks * 52   # translate lift to $/yr</code></pre>
+          <h5>Why it's advanced / how it's tested</h5>
+          <p>Catching that auto-refresh inflated the control was the whole game; once removed, the variant's page depth flipped positive. we framed it as an explicit <b>ad-revenue vs. subscription tradeoff</b> (+~$864K/yr vs. ~5% sub dip) and held the line on significance: a related test that was only sig at 90% was flagged as elevated false-positive risk rather than calling it a win.</p>
+          <p class="caveat">Representative reconstruction; the +48% CTR / ~$864K-per-year / −5% subs figures are real.</p>
+        </div>
+      </details>
+    </article>
+  </div>
+
+  <!-- DIFF IN DIFF -->
+  <div class="container reveal">
+    <article class="story">
+      <div class="head">
+        <span class="tag causal">Causal Inference · Quasi-Experiment</span>
+        <h3>Difference-in-Differences: BOGO vs. "2-For"</h3>
+        <p class="role">Molson Coors · Circle K FL · 22 test / 23 control stores</p>
+      </div>
+      <div class="body">
+        <div>
+          <div class="qa"><div class="q">The question</div><div class="a">Did "BOGO" promo language <i>causally</i> outsell "2-For," given we couldn't fully randomize, only observe selected stores?</div></div>
+          <div class="qa"><div class="q">What we did</div><div class="a"><b>Difference-in-differences</b>: YoY % unit change for test vs. a predetermined control vs. a broad "general Florida" baseline, by segment and pack, with t-tests on the weekly differences.</div></div>
+          <div class="qa"><div class="q">The honest finding</div><div class="a">Test differed from <i>general</i> trends, but <b>not</b> from the control, while control ≠ general. That means the <b>control stores were poorly matched</b>.</div></div>
+          <div class="qa"><div class="q">Result</div><div class="a">Rather than declare a win, we recommended re-selecting better-matched controls before trusting the read. Integrity over a clean headline.</div></div>
+        </div>
+        <div>
+          <div class="viz-wrap">
+            <div class="viz-title">YoY unit change · test vs. control vs. general</div>
+            <svg class="svgchart" id="didChart" viewBox="0 0 600 230" aria-label="Difference in differences"></svg>
+            <div class="lgnd"><span><i style="background:var(--accent)"></i>Test</span><span><i style="background:var(--blue)"></i>Control</span><span><i style="background:#9aa7b1"></i>General FL</span></div>
+            <div class="viz-cap">Test tracks the control almost exactly, so the promo shows no effect <i>relative to control</i>. Both diverge from "general," which exposed the control as mismatched.</div>
+          </div>
+        </div>
+      </div>
+      <details class="deep"><summary>Technical deep-dive: math, SQL &amp; Python<span class="real">real code</span></summary>
+        <div>
+          <h5>The math</h5>
+          <p class="mathbox">Difference-in-differences: <span class="mono">DiD = (Ȳ_test,post − Ȳ_test,pre) − (Ȳ_ctrl,post − Ȳ_ctrl,pre)</span>. It rests on the <b>parallel-trends</b> assumption: absent treatment, test and control would move together. It was operationalized as weekly <b>year-over-year % change</b> per store group, then t-tested the difference series.</p>
+          <h5>Python: the three comparisons that exposed the bad control</h5>
+          <pre><code>from scipy import stats
+# weekly year-over-year % change per store group
+test_yoy    = [cy/ya - 1 for cy, ya in zip(test_cy,  test_ya)]
+control_yoy = [cy/ya - 1 for cy, ya in zip(ctrl_cy,  ctrl_ya)]
+general_yoy = [cy/ya - 1 for cy, ya in zip(gen_cy,   gen_ya)]
+
+stats.ttest_ind(test_yoy,    control_yoy)   # vs designated control → not sig
+stats.ttest_ind(test_yoy,    general_yoy)   # vs general FL         → significant
+stats.ttest_ind(control_yoy, general_yoy)   # control vs general    → significant (!)</code></pre>
+          <h5>Why it's advanced / how it's tested</h5>
+          <p>The honest read came from that third test: if the <b>control</b> already differs from the general baseline, it isn't a valid counterfactual, so we couldn't trust "test ≈ control = no effect." Rather than ship a null, we recommended re-selecting controls matched on <b>pre-period sales trajectory</b> (to satisfy parallel trends) before re-running.</p>
+          <p class="caveat">Condensed from the real <span class="mono">diffindiff</span> repo (<span class="mono">CircleK_FL_BOGOvs2For.py</span> + <span class="mono">ck_fl_table_code.sql</span>).</p>
+        </div>
+      </details>
+    </article>
+  </div>
+</section>
+
+<!-- ML & FORECASTING -->
+<section id="ml" style="background:var(--bg-alt);">
+  <div class="container reveal">
+    <p class="kicker">Models &amp; Pipelines</p>
+    <h2 class="section-title">Prediction, at scale</h2>
+    <p class="section-dek">A production gradient-boosting risk model, the billion-row pipeline behind it, attribution, clustering, and forecasting.</p>
+  </div>
+
+  <!-- MTA + SURVIVAL row -->
+  <div class="container reveal">
+    <article class="story">
+      <div class="head">
+        <span class="tag ml">Attribution &amp; Survival</span>
+        <h3>Two ways to value a decision</h3>
+        <p class="role">Gannett (MTA) · Empirical (survival curves)</p>
+      </div>
+      <div class="body">
+        <div>
+          <div class="qa"><div class="q">Markov multi-touch attribution</div><div class="a">Reconstructed user journeys from GPS-in-URL with 7/30/90-day lookbacks, then assigned channel credit by <b>removal effect</b> (how much conversion drops if a channel disappears) versus first/last/linear baselines. Shipped as a weekly Tableau dashboard.</div></div>
+          <div class="qa"><div class="q">Survival analysis (remediation)</div><div class="a">Built <b>survival curves</b> for how fast CVEs are found and closed on client assets, then modeled the counterfactual if they prioritized via our model first.</div></div>
+          <div class="qa"><div class="q">The throughline</div><div class="a">This work spans <b>both</b> bottom-up MTA and top-down MMM, and frames model value in business terms: faster remediation of the CVEs that actually matter.</div></div>
+        </div>
+        <div>
+          <div class="viz-wrap">
+            <div class="viz-title">Remediation survival curve (illustrative)</div>
+            <svg class="svgchart" id="survChart" viewBox="0 0 600 230" aria-label="Survival curve"></svg>
+            <div class="lgnd"><span><i style="background:#9aa7b1"></i>Today's prioritization</span><span><i style="background:var(--green)"></i>Model-prioritized</span></div>
+            <div class="viz-cap">Share of important CVEs still open over time. Prioritizing with the model closes the high-risk ones faster, so the curve drops sooner.</div>
+          </div>
+        </div>
+      </div>
+      <details class="deep"><summary>Technical deep-dive: the Markov &amp; survival math<span class="repr">representative</span></summary>
+        <div>
+          <h5>Markov multi-touch attribution: the math</h5>
+          <p class="mathbox">Model journeys as a Markov chain over channel states plus two absorbing states (<span class="mono">conversion</span>, <span class="mono">null</span>). The credit for channel <span class="mono">c</span> is its <b>removal effect</b>: <span class="mono">1 − P(convert | c removed) / P(convert | full graph)</span>, i.e. how much conversion probability collapses if that channel disappears.</p>
+          <pre><code>import numpy as np
+def p_convert(T):                       # absorption prob into 'conversion'
+    Q, R = split_transient_absorbing(T) # Q: transient→transient, R: →absorbing
+    N = np.linalg.inv(np.eye(len(Q)) - Q)   # fundamental matrix
+    return (N @ R)[start_idx, conv_idx]
+
+base = p_convert(T)
+removal_effect = {c: 1 - p_convert(drop_channel(T, c)) / base for c in channels}</code></pre>
+          <h5>Survival analysis: the math</h5>
+          <p class="mathbox">Kaplan-Meier estimate of "still un-remediated" over time: <span class="mono">S(t) = Π (1 − dᵢ/nᵢ)</span> for events up to <span class="mono">t</span>, with right-censoring for CVEs not yet closed. Compare the model-prioritized cohort's curve to the status-quo curve. The gap is faster remediation of the CVEs that matter.</p>
+          <pre><code>from lifelines import KaplanMeierFitter
+km = KaplanMeierFitter()
+km.fit(durations=days_to_close, event_observed=is_closed)   # censored = still open
+km.survival_function_                                       # S(t) curve</code></pre>
+          <h5>Why it's advanced</h5>
+          <p>Absorbing-Markov math (fundamental matrix) for removal-effect credit beats heuristic first/last-touch; right-censored survival estimation is the correct tool for "time-to-remediation," not plain regression.</p>
+          <p class="caveat">Representative reconstruction of the methods; MTA shipped at Gannett, survival work at Empirical.</p>
+        </div>
+      </details>
+    </article>
+  </div>
+
+  <!-- CLUSTERING + FORECAST mini -->
+  <div class="container reveal">
+    <article class="story">
+      <div class="head">
+        <span class="tag ml">Unsupervised &amp; Time Series</span>
+        <h3>Clustering &amp; forecasting, the rigorous way</h3>
+        <p class="role">Molson Coors · pricing clusters &amp; COVID forecaster</p>
+      </div>
+      <div class="body">
+        <div>
+          <div class="qa"><div class="q">8-algorithm clustering benchmark</div><div class="a">To find each product's competitive set, we didn't guess a model. We benchmarked <b>KMeans, MiniBatch-KMeans, DBSCAN, HDBSCAN, Agglomerative, Birch, Spectral, GMM</b> over PCA <i>and</i> an autoencoder, tuned by <b>silhouette score</b>.</div></div>
+          <div class="qa"><div class="q">Forecasting at scale</div><div class="a">An <b>auto-ARIMA</b> COVID-impact forecaster at store × segment × pack (Box-Cox, SMAPE cross-validation, deployed as three R Shiny dashboards), parallelized it (multiprocessing vs. concurrent.futures vs. Dask).</div></div>
+          <div class="qa"><div class="q">How we pick</div><div class="a">Always validate the choice: silhouette for clusters, holdout SMAPE for forecasts, PR-AUC for the imbalanced classifier. The metric matches the problem.</div></div>
+        </div>
+        <div>
+          <div class="viz-wrap">
+            <div class="viz-title">Model selection by silhouette score (illustrative)</div>
+            <div class="barrow"><div class="blab">KMeans</div><div class="bartrack"><div class="barfill" data-w="86" style="background:var(--blue)"></div></div><div class="barval">0.61</div></div>
+            <div class="barrow"><div class="blab">Agglomerative</div><div class="bartrack"><div class="barfill" data-w="78" style="background:var(--blue2)"></div></div><div class="barval">0.55</div></div>
+            <div class="barrow"><div class="blab">HDBSCAN</div><div class="bartrack"><div class="barfill" data-w="70" style="background:var(--blue2)"></div></div><div class="barval">0.49</div></div>
+            <div class="barrow"><div class="blab">GMM</div><div class="bartrack"><div class="barfill" data-w="61" style="background:#9aa7b1"></div></div><div class="barval">0.43</div></div>
+            <div class="barrow"><div class="blab">DBSCAN</div><div class="bartrack"><div class="barfill" data-w="48" style="background:#9aa7b1"></div></div><div class="barval">0.34</div></div>
+            <div class="viz-cap">Don't guess the algorithm; benchmark them and let the metric decide.</div>
+          </div>
+        </div>
+      </div>
+      <details class="deep"><summary>Technical deep-dive: math &amp; Python<span class="real">real code</span></summary>
+        <div>
+          <h5>The math</h5>
+          <p class="mathbox">Silhouette for point <span class="mono">i</span>: <span class="mono">s(i) = (b − a) / max(a, b)</span>, where <span class="mono">a</span> = mean intra-cluster distance and <span class="mono">b</span> = mean nearest-other-cluster distance. Pick the algorithm + parameters that maximize the mean silhouette, an objective answer to "how many clusters / which method," not a guess.</p>
+          <h5>Python: scale → reduce → benchmark by silhouette</h5>
+          <pre><code>from sklearn import cluster, metrics
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
+X = PCA(n_components=n).fit_transform(StandardScaler().fit_transform(df))
+
+scores = []
+for k in range(2, 12):
+    labels = cluster.KMeans(n_clusters=k).fit_predict(X)
+    scores.append((k, metrics.silhouette_score(X, labels)))
+best_k = max(scores, key=lambda t: t[1])[0]
+
+# ...repeated across KMeans, MiniBatch-KMeans, DBSCAN, HDBSCAN, Agglomerative,
+#    Birch, Spectral, GMM over PCA *and* a Keras-autoencoder embedding.</code></pre>
+          <h5>Why it's advanced</h5>
+          <p>Eight algorithms benchmarked across <b>two</b> representations (linear PCA <i>and</i> a nonlinear autoencoder), each tuned by silhouette, so the competitive-set clustering was chosen by evidence, not habit. The same discipline applies everywhere: the validation metric matches the problem.</p>
+          <p class="caveat">Condensed from the real <span class="mono">Step 3: Create Pricing Clusters</span> notebook.</p>
+        </div>
+      </details>
+    </article>
+  </div>
+
+  <!-- XGBOOST -->
+  <div class="container reveal">
+    <article class="story">
+      <div class="head">
+        <span class="tag ml">Supervised ML · Production</span>
+        <h3>Exploit Prediction Model (XGBoost)</h3>
+        <p class="role">Empirical Security · powers public EPSS + client models</p>
+      </div>
+      <div class="body">
+        <div>
+          <div class="qa"><div class="q">What it predicts</div><div class="a">The probability a known vulnerability (CVE) will be <b>exploited within 30 days</b>, scored per vulnerability, every day.</div></div>
+          <div class="qa"><div class="q">Why gradient-boosted trees</div><div class="a">Tabular, heterogeneous, missing-heavy data with thousands of features and nonlinear interactions: exactly where <b>XGBoost</b> beats linear models and needs no scaling.</div></div>
+          <div class="qa"><div class="q">How it's measured</div><div class="a">Severe class imbalance (few CVEs are ever exploited) → we lean on <b>PR-AUC</b> over accuracy, with probability <b>calibration</b> since the output is a probability.</div></div>
+          <div class="qa"><div class="q">Where it ships</div><div class="a">Feeds the freely published <b>EPSS</b> scores and client-specific local models that prioritize what to patch first.</div></div>
+        </div>
+        <div>
+          <div class="viz-wrap">
+            <div class="viz-title">The shape of the problem</div>
+            <div class="bignums">
+              <div class="bn"><div class="v">~300K</div><div class="l">vulnerabilities scored</div></div>
+              <div class="bn"><div class="v">2,000+</div><div class="l">features engineered</div></div>
+              <div class="bn"><div class="v">30+</div><div class="l">data sources (APIs + private repos)</div></div>
+              <div class="bn"><div class="v">12 mo</div><div class="l">daily history per model build</div></div>
+            </div>
+            <div class="viz-cap">A per-vulnerability probability, the basis for prioritizing remediation across an entire ecosystem.</div>
+          </div>
+          <div class="viz-wrap" style="margin-top:14px;">
+            <div class="viz-title">How we measure it · coverage / efficiency curve</div>
+            <svg class="svgchart" id="effChart" viewBox="0 0 600 200" aria-label="Coverage efficiency curve"></svg>
+            <div class="lgnd"><span><i style="background:var(--plum)"></i>Model</span><span><i style="background:#9aa7b1"></i>Random baseline</span></div>
+            <div class="viz-cap">Share of real exploits captured vs. share of vulnerabilities reviewed. The model concentrates the exploits up front, exactly what a prioritization score should do. With heavy class imbalance, we lead with PR-AUC and these coverage/efficiency curves, not raw accuracy.</div>
+          </div>
+        </div>
+      </div>
+      <details class="deep"><summary>Technical deep-dive: math &amp; Python<span class="repr">representative</span></summary>
+        <div>
+          <h5>The math</h5>
+          <p class="mathbox">Gradient-boosted trees fit an additive ensemble minimizing <span class="mono">L = Σ logloss(yᵢ, ŷᵢ) + Σ Ω(treeₖ)</span>, each new tree pointed down the gradient of the loss. Positives are rare, so they get weighted (<span class="mono">scale_pos_weight = neg/pos</span>) and judge the model on <b>PR-AUC</b> + calibration, not accuracy (which a "predict-never-exploited" model would ace).</p>
+          <h5>Python: training with imbalance + early stopping</h5>
+          <pre><code>import xgboost as xgb
+params = dict(objective='binary:logistic', eval_metric='aucpr',
+              max_depth=6, eta=0.05, subsample=0.8, colsample_bytree=0.8,
+              scale_pos_weight=neg/pos)              # severe class imbalance
+model = xgb.train(params, dtrain, num_boost_round=2000,
+                  evals=[(dvalid, 'valid')], early_stopping_rounds=50)</code></pre>
+          <h5>Python: evaluate for rare positives</h5>
+          <pre><code>from sklearn.metrics import average_precision_score
+p = model.predict(dtest)
+average_precision_score(y_test, p)        # PR-AUC, the metric that matters here
+# + isotonic/Platt calibration since the output is consumed as a probability
+# + coverage/efficiency (gain) curves to show exploits captured per % reviewed</code></pre>
+          <h5>Why it's advanced</h5>
+          <p>2,000+ features from 30+ sources, gradient boosting for nonlinear tabular interactions, imbalance handling, early stopping, and an evaluation stack built for rare events (PR-AUC, calibration, coverage/efficiency curves) rather than headline accuracy.</p>
+          <p class="caveat">Representative. The production code remains at Empirical; the scale figures are real.</p>
+        </div>
+      </details>
+    </article>
+  </div>
+
+  <!-- PIPELINE REBUILD -->
+  <div class="container reveal">
+    <article class="story">
+      <div class="head">
+        <span class="tag ml">Data Engineering · Performance</span>
+        <h3>Billion-Row Pipeline: 8h → 3.5h</h3>
+        <p class="role">Empirical Security · Spark → DuckDB · Databricks</p>
+      </div>
+      <div class="body">
+        <div>
+          <div class="qa"><div class="q">The bottleneck</div><div class="a">The training data is the hard part: intermediate sets balloon past <b>2 billion rows</b>, and the original build took <b>over 8 hours</b> per run.</div></div>
+          <div class="qa"><div class="q">What we did</div><div class="a">Audited the pipeline end to end, removed redundant steps, and shifted the heavy lifting from single-threaded Spark to <b>multi-threaded DuckDB</b>.</div></div>
+          <div class="qa"><div class="q">Kept it current</div><div class="a">Added a <b>delta process</b> so the most recent month builds incrementally on a scheduled job, with no full rebuild.</div></div>
+          <div class="qa"><div class="q">Result</div><div class="a">A full build (12 months, 300K+ vulnerabilities, 2,000 features) dropped to <b>under 3.5 hours</b>, and stays fresh automatically.</div></div>
+        </div>
+        <div>
+          <div class="viz-wrap">
+            <div class="viz-title">Full training-data build time</div>
+            <div class="barrow"><div class="blab">Original (Spark)</div><div class="bartrack"><div class="barfill" data-w="100" style="background:#9aa7b1"></div></div><div class="barval">8.0 h</div></div>
+            <div class="barrow"><div class="blab">Rebuilt (DuckDB)</div><div class="bartrack"><div class="barfill" data-w="44" style="background:var(--blue)"></div></div><div class="barval">3.5 h</div></div>
+            <div class="viz-cap">~2.3× faster. DuckDB's single-node, columnar, multi-threaded engine avoided Spark's cluster-shuffle overhead for this workload size.</div>
+          </div>
+        </div>
+      </div>
+      <details class="deep"><summary>Technical deep-dive: the engineering<span class="repr">representative</span></summary>
+        <div>
+          <h5>The key insight</h5>
+          <p class="mathbox">At this scale the workload is a big <b>single-pass join/aggregate</b> over columnar Parquet, not something that needs a cluster. Spark paid a <b>shuffle</b> tax and ran effectively single-threaded; <b>DuckDB</b> runs it multi-threaded on one node with no shuffle. Match the engine to the workload, then only rebuild what changed.</p>
+          <h5>Python / SQL: multi-threaded DuckDB over S3 Parquet, incremental</h5>
+          <pre><code>import duckdb
+con = duckdb.connect()
+con.execute("SET threads TO 16")
+con.execute("""
+  CREATE TABLE model_input AS
+  SELECT v.cve_id, f.*, l.label
+  FROM read_parquet('s3://.../features/*.parquet')      f
+  JOIN read_parquet('s3://.../vulns/*.parquet')         v USING (cve_id)
+  LEFT JOIN read_parquet('s3://.../labels/*.parquet')   l USING (cve_id, as_of_date)
+  WHERE as_of_date &gt;= current_date - INTERVAL 30 DAY     -- delta: latest month only
+""")
+# 8 h  (Spark, distributed shuffles)  →  3.5 h  (DuckDB, single-node columnar)</code></pre>
+          <h5>Why it's advanced</h5>
+          <p>The win wasn't a faster cluster; it was recognizing the workload <i>didn't need one</i>, removing redundant passes, and adding a <b>delta build</b> so the latest month is computed incrementally on a schedule. ~2.3× faster and self-refreshing. Same "profile, then pick the right tool" instinct as parallelizing the Molson ARIMA forecaster (multiprocessing vs. Dask).</p>
+          <p class="caveat">Representative. The production code remains at Empirical; the 8h→3.5h result is real.</p>
+        </div>
+      </details>
+    </article>
+  </div>
+</section>
+
+<!-- MATRIX -->
+<section id="matrix">
+  <div class="container reveal">
+    <p class="kicker">The Coverage</p>
+    <h2 class="section-title">Every method, mapped to real work</h2>
+    <p class="section-dek">The topics that come up in interviews, and exactly where each one was shipped.</p>
+    <div class="matrix">
+      <div class="mrow"><div class="mt">A/B &amp; experimentation</div><div class="mc"><span class="proj-chip"><b>Gannett</b> HP4U/Taboola</span><span class="proj-chip"><b>Gannett</b> landing-page</span><span class="proj-chip"><b>Molson</b> Circle K</span></div></div>
+      <div class="mrow"><div class="mt">Regret min / bandits</div><div class="mc"><span class="proj-chip"><b>Gannett</b> Thompson Sampling → live API</span><span class="proj-chip">ε-greedy · UCB · TS compared</span></div></div>
+      <div class="mrow"><div class="mt">Causal inference</div><div class="mc"><span class="proj-chip"><b>Molson</b> difference-in-differences</span><span class="proj-chip"><b>Gannett</b> confound diagnosis</span></div></div>
+      <div class="mrow"><div class="mt">Gradient boosting / XGBoost</div><div class="mc"><span class="proj-chip"><b>Empirical</b> exploit model (XGBoost)</span><span class="proj-chip"><b>Molson</b> CatBoost/GBM (reference)</span></div></div>
+      <div class="mrow"><div class="mt">Recommendation / search ranking</div><div class="mc"><span class="proj-chip"><b>Gannett</b> co-occurrence ranking (BUILT)</span><span class="proj-chip"><b>Gannett</b> Taboola (evaluation)</span></div></div>
+      <div class="mrow"><div class="mt">Conversion funnel optimization</div><div class="mc"><span class="proj-chip"><b>Gannett</b> checkout-funnel investigation</span><span class="proj-chip"><b>Gannett</b> landing-page funnels</span></div></div>
+      <div class="mrow"><div class="mt">Metrics &amp; dashboards</div><div class="mc"><span class="proj-chip"><b>Gannett</b> Looker subscription analytics</span><span class="proj-chip"><b>Molson</b> R Shiny</span><span class="proj-chip">Tableau (across roles)</span></div></div>
+      <div class="mrow"><div class="mt">Survival analysis</div><div class="mc"><span class="proj-chip"><b>Empirical</b> CVE remediation curves</span></div></div>
+      <div class="mrow"><div class="mt">Decision trees / neural nets</div><div class="mc"><span class="proj-chip"><b>MillerCoors</b> applied modeling</span><span class="proj-chip"><b>Molson</b> PyTorch (reference)</span></div></div>
+      <div class="mrow"><div class="mt">Predictive / regression modeling</div><div class="mc"><span class="proj-chip"><b>Clarity</b> Caterpillar transit-time (SAS)</span><span class="proj-chip"><b>Molson</b> Ridge/Lasso/ElasticNet + GridSearchCV</span></div></div>
+      <div class="mrow"><div class="mt">Attribution &amp; MMM</div><div class="mc"><span class="proj-chip"><b>Gannett</b> Markov MTA</span><span class="proj-chip"><b>Marketing Attribution</b> top-down MMM</span></div></div>
+      <div class="mrow"><div class="mt">Model evaluation</div><div class="mc"><span class="proj-chip"><b>Empirical</b> coverage/efficiency &amp; confusion matrix</span><span class="proj-chip">PR-AUC · lift curves</span></div></div>
+      <div class="mrow"><div class="mt">Forecasting</div><div class="mc"><span class="proj-chip"><b>Molson</b> auto-ARIMA + Shiny</span><span class="proj-chip"><b>Multiply</b> Prophet bid model</span></div></div>
+      <div class="mrow"><div class="mt">Unsupervised / clustering</div><div class="mc"><span class="proj-chip"><b>Molson</b> 8-algorithm benchmark + autoencoder</span></div></div>
+      <div class="mrow"><div class="mt">Big-data engineering</div><div class="mc"><span class="proj-chip"><b>Empirical</b> Spark→DuckDB (2.3×)</span><span class="proj-chip"><b>Clarity</b> Teradata data-marts</span><span class="proj-chip"><b>Molson</b> Dask</span></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <h3>Operating principles</h3>
+    <p>Start from the product question, design the experiment that can actually answer it, and translate the result into a decision a cross-functional team will act on. Pick the model the data demands, measure it with the metric that matches the problem, and never let a clean headline outrun an honest read.</p>
+    <div style="margin-top:18px;">
+      <span class="pill">A/B Testing &amp; Experimentation</span><span class="pill">Search Ranking &amp; Matching</span><span class="pill">Funnel / Conversion</span><span class="pill">Causal Inference (Diff-in-Diff)</span><span class="pill">Expert SQL · Python · R</span><span class="pill">Metrics &amp; Dashboards (Looker · Tableau)</span><span class="pill">Thompson Sampling</span><span class="pill">Markov Attribution</span><span class="pill">XGBoost · Power analysis · PR-AUC</span>
+    </div>
+    <p class="note">Interactive portfolio · Tricia Scully · built to be explored live. Empirical figures from current role shown illustratively where the underlying code is proprietary.</p>
+  </div>
+</footer>
+
+<script>
+/* ---------- reading progress ---------- */
+const prog=document.getElementById('progress');
+addEventListener('scroll',()=>{const h=document.documentElement;const sc=(h.scrollTop)/(h.scrollHeight-h.clientHeight);prog.style.width=(sc*100)+'%';});
+
+/* ---------- reveal on scroll ---------- */
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');
+  // animate bars within
+  e.target.querySelectorAll('.barfill').forEach(b=>{b.style.width=b.dataset.w+'%';});
+  e.target.querySelectorAll('.dvbar').forEach(b=>{b.style.width=b.dataset.w+'%';});
+}});},{threshold:.18});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---------- scroll-spy nav ---------- */
+const links=[...document.querySelectorAll('nav .navlink')];
+const secs=links.map(l=>document.querySelector(l.getAttribute('href')));
+addEventListener('scroll',()=>{let i=secs.length-1;for(;i>=0;i--){if(secs[i]&&secs[i].getBoundingClientRect().top<140)break;}links.forEach(l=>l.classList.remove('active'));if(i>=0)links[i].classList.add('active');});
+
+/* ====================================================================
+   SVG chart helpers (self-contained, no libraries)
+==================================================================== */
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);return e;}
+
+/* generic line chart: maps data coords -> svg coords */
+function lineChart(svg,opts){
+  const W=600,H=opts.H||200,pl=44,pr=14,pt=14,pb=30;
+  const xMin=opts.xMin??0,xMax=opts.xMax,yMin=opts.yMin??0,yMax=opts.yMax;
+  const sx=x=>pl+(x-xMin)/(xMax-xMin)*(W-pl-pr);
+  const sy=y=>H-pb-(y-yMin)/(yMax-yMin)*(H-pt-pb);
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  // y gridlines + labels
+  (opts.yTicks||[]).forEach(t=>{
+    svg.appendChild(el('line',{x1:pl,y1:sy(t),x2:W-pr,y2:sy(t),stroke:'#e6e4df','stroke-width':1}));
+    const lb=el('text',{x:pl-8,y:sy(t)+4,'text-anchor':'end','font-size':11,fill:'#8e8e8e'});lb.textContent=(opts.yFmt?opts.yFmt(t):t);svg.appendChild(lb);
+  });
+  // x labels
+  (opts.xTicks||[]).forEach(t=>{const lb=el('text',{x:sx(t.x),y:H-10,'text-anchor':'middle','font-size':11,fill:'#8e8e8e'});lb.textContent=t.label;svg.appendChild(lb);});
+  // axis baseline
+  svg.appendChild(el('line',{x1:pl,y1:sy(yMin),x2:W-pr,y2:sy(yMin),stroke:'#cfcfcf','stroke-width':1}));
+  // series
+  opts.series.forEach(se=>{
+    let d='';se.pts.forEach((p,i)=>{d+=(i?'L':'M')+sx(p[0]).toFixed(1)+' '+sy(p[1]).toFixed(1)+' ';});
+    const join=se.markers?'miter':'round';
+    const path=el('path',{d:d,fill:'none',stroke:se.color,'stroke-width':se.w||2.5,'stroke-linejoin':join,'stroke-linecap':'round'});
+    if(se.dash)path.setAttribute('stroke-dasharray',se.dash);
+    // draw-on animation
+    svg.appendChild(path);
+    try{const L=path.getTotalLength();path.style.strokeDasharray=L;path.style.strokeDashoffset=L;path.style.transition='stroke-dashoffset 1.4s ease';requestAnimationFrame(()=>{setTimeout(()=>{path.style.strokeDashoffset=0;},120);});}catch(e){}
+    // dot at every sampled point (discrete updates)
+    if(se.markers){se.pts.forEach(p=>svg.appendChild(el('circle',{cx:sx(p[0]),cy:sy(p[1]),r:2.4,fill:se.color})));}
+    // end dot
+    if(se.dot!==false&&!se.markers){const lp=se.pts[se.pts.length-1];svg.appendChild(el('circle',{cx:sx(lp[0]),cy:sy(lp[1]),r:3.5,fill:se.color}));}
+  });
+}
+
+/* filled distribution chart (for posteriors) */
+function distChart(svg){
+  const W=600,H=230,pb=26,pt=10,pl=10,pr=10;
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  function gauss(mu,s){const pts=[];for(let i=0;i<=120;i++){const x=i/120;const y=Math.exp(-((x-mu)**2)/(2*s*s));pts.push([x,y]);}return pts;}
+  const sx=x=>pl+x*(W-pl-pr);
+  const sy=y=>H-pb-y*(H-pt-pb);
+  // axis
+  svg.appendChild(el('line',{x1:pl,y1:sy(0),x2:W-pr,y2:sy(0),stroke:'#cfcfcf','stroke-width':1}));
+  ['0%','5%','10%','15%','20%'].forEach((lab,i)=>{const x=i/4;const t=el('text',{x:sx(x),y:H-8,'text-anchor':'middle','font-size':11,fill:'#8e8e8e'});t.textContent=lab;svg.appendChild(t);});
+  const xlab=el('text',{x:W/2,y:H-8,'font-size':0});svg.appendChild(xlab);
+  function draw(mu,s,color,fill){
+    const pts=gauss(mu,s);let d='M'+sx(pts[0][0])+' '+sy(0)+' ';pts.forEach(p=>{d+='L'+sx(p[0]).toFixed(1)+' '+sy(p[1]).toFixed(1)+' ';});d+='L'+sx(pts[pts.length-1][0])+' '+sy(0)+' Z';
+    const area=el('path',{d:d,fill:fill,opacity:0});svg.appendChild(area);
+    const line=el('path',{d:d.replace(/Z$/,''),fill:'none',stroke:color,'stroke-width':2.2});svg.appendChild(line);
+    setTimeout(()=>{area.style.transition='opacity 1s ease';area.style.opacity=.55;},200);
+  }
+  // control: mean ~0.10 (x=0.5), variant ~0.12 (x=0.6), variant tighter
+  draw(0.50,0.085,'#9aa7b1','#c3ccd2');
+  draw(0.62,0.060,'#1a476f','#9db8cf');
+}
+
+/* render charts when visible */
+function whenVisible(id,fn){const node=document.getElementById(id);if(!node)return;const o=new IntersectionObserver((es,ob)=>{es.forEach(e=>{if(e.isIntersecting){fn(node);ob.disconnect();}});},{threshold:.3});o.observe(node);}
+
+whenVisible('betaChart',svg=>distChart(svg));
+
+whenVisible('allocChart',svg=>lineChart(svg,{
+  H:200,xMin:1,xMax:22,yMin:0,yMax:100,
+  yTicks:[0,25,50,75,100],yFmt:v=>v+'%',
+  xTicks:[{x:1,label:'start'},{x:11,label:'mid-test'},{x:22,label:'converging'}],
+  series:[
+    {color:'#1a476f',markers:true,w:2,pts:[[1,50],[2,96],[3,6],[4,98],[5,14],[6,91],[7,27],[8,72],[9,99],[10,48],[11,87],[12,63],[13,90],[14,71],[15,84],[16,73],[17,85],[18,76],[19,82],[20,77],[21,83],[22,79]]},
+    {color:'#9aa7b1',markers:true,w:2,pts:[[1,50],[2,4],[3,94],[4,2],[5,86],[6,9],[7,73],[8,28],[9,1],[10,52],[11,13],[12,37],[13,10],[14,29],[15,16],[16,27],[17,15],[18,24],[19,18],[20,23],[21,17],[22,21]]}
+  ]
+}));
+
+
+whenVisible('didChart',svg=>lineChart(svg,{
+  H:230,xMin:1,xMax:6,yMin:-10,yMax:25,
+  yTicks:[-10,0,10,20],yFmt:v=>v+'%',
+  xTicks:[{x:1,label:'pre'},{x:3,label:'promo start'},{x:6,label:'post'}],
+  series:[
+    {color:'#d56a1f',pts:[[1,4],[2,5],[3,7],[4,12],[5,15],[6,16]],w:3}, // test
+    {color:'#1a476f',pts:[[1,3.5],[2,5],[3,6.5],[4,11],[5,14.5],[6,15.5]],dash:'6 4'}, // control (tracks test)
+    {color:'#9aa7b1',pts:[[1,2],[2,2.5],[3,2],[4,3],[5,4],[6,3.5]]} // general
+  ]
+}));
+
+whenVisible('survChart',svg=>lineChart(svg,{
+  H:230,xMin:0,xMax:90,yMin:0,yMax:100,
+  yTicks:[0,25,50,75,100],yFmt:v=>v+'%',
+  xTicks:[{x:0,label:'day 0'},{x:30,label:'30'},{x:60,label:'60'},{x:90,label:'90'}],
+  series:[
+    {color:'#9aa7b1',pts:[[0,100],[15,88],[30,74],[45,60],[60,46],[75,36],[90,28]]}, // today
+    {color:'#3f7d51',pts:[[0,100],[15,70],[30,46],[45,30],[60,19],[75,12],[90,8]]}   // model
+  ]
+}));
+
+whenVisible('effChart',svg=>lineChart(svg,{
+  H:200,xMin:0,xMax:100,yMin:0,yMax:100,
+  yTicks:[0,25,50,75,100],yFmt:v=>v+'%',
+  xTicks:[{x:0,label:'0%'},{x:25,label:'25%'},{x:50,label:'50%'},{x:100,label:'100% reviewed'}],
+  series:[
+    {color:'#7a3b69',pts:[[0,0],[10,55],[20,75],[30,86],[50,95],[75,99],[100,100]],w:3}, // model
+    {color:'#9aa7b1',pts:[[0,0],[100,100]],dash:'5 4',dot:false} // random
+  ]
+}));
+
+/* co-occurrence heatmap */
+(function(){
+  const host=document.getElementById('cooc');if(!host)return;
+  const items=['A','B','C','D','E','F','G'];const n=items.length;
+  // deterministic-ish symmetric matrix, strong diagonal
+  const seed=[[1,.7,.2,.1,.05,.15,.3],[.7,1,.5,.15,.1,.2,.25],[.2,.5,1,.6,.2,.1,.15],[.1,.15,.6,1,.55,.25,.1],[.05,.1,.2,.55,1,.65,.2],[.15,.2,.1,.25,.65,1,.5],[.3,.25,.15,.1,.2,.5,1]];
+  const cell=30,gap=3,lab=22;
+  const W=lab+n*(cell+gap),H=lab+n*(cell+gap);
+  let html='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block;">';
+  for(let i=0;i<n;i++){html+='<text x="'+(lab+i*(cell+gap)+cell/2)+'" y="'+(lab-8)+'" text-anchor="middle" font-size="11" fill="#8e8e8e">'+items[i]+'</text>';}
+  for(let r=0;r<n;r++){
+    html+='<text x="'+(lab-8)+'" y="'+(lab+r*(cell+gap)+cell/2+4)+'" text-anchor="end" font-size="11" fill="#8e8e8e">'+items[r]+'</text>';
+    for(let c=0;c<n;c++){
+      const v=seed[r][c];const op=(0.12+0.88*v).toFixed(2);
+      const x=lab+c*(cell+gap),y=lab+r*(cell+gap);
+      const diag=r===c;
+      html+='<rect x="'+x+'" y="'+y+'" width="'+cell+'" height="'+cell+'" rx="3" fill="'+(diag?'#cfcfcf':'#7a3b69')+'" fill-opacity="'+(diag?0.5:op)+'"><title>'+items[r]+' + '+items[c]+': '+(v).toFixed(2)+'</title></rect>';
+    }
+  }
+  html+='</svg>';host.innerHTML=html;
+})();
+
+/* ---------- lightweight syntax highlighter (SQL + Python, no libraries) ---------- */
+(function(){
+  const KW=new Set(['select','from','where','join','on','and','or','group','by','having','as','case','when','then','else','end','in','if','between','distinct','count','sum','create','table','left','right','inner','outer','using','interval','day','set','order','limit','with','not','null','is','desc','asc','safe_divide','countif','import','for','def','return','lambda','assert','class','while','none','true','false','print','range','round','zip','enumerate']);
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function hl(code){
+    const re=/(\/\*[\s\S]*?\*\/)|(--[^\n]*|#[^\n]*)|("""[\s\S]*?"""|'''[\s\S]*?'''|'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")|(\b\d+\.?\d*\b)|([A-Za-z_][A-Za-z_0-9]*)(\s*\()?|([A-Za-z_][A-Za-z_0-9]*)/g;
+    let out='',last=0,m;
+    while((m=re.exec(code))){
+      out+=esc(code.slice(last,m.index));
+      if(m[1]||m[2]) out+='<span class="c-com">'+esc(m[0])+'</span>';
+      else if(m[3]) out+='<span class="c-str">'+esc(m[0])+'</span>';
+      else if(m[4]) out+='<span class="c-num">'+esc(m[0])+'</span>';
+      else if(m[5]!==undefined){
+        const w=m[5];
+        if(KW.has(w.toLowerCase())) out+='<span class="c-kw">'+esc(w)+'</span>'+(m[6]||'');
+        else if(m[6]) out+='<span class="c-fn">'+esc(w)+'</span>'+m[6];
+        else out+=esc(w);
+      }
+      else if(m[7]!==undefined) out+= KW.has(m[7].toLowerCase()) ? '<span class="c-kw">'+esc(m[7])+'</span>' : esc(m[7]);
+      last=re.lastIndex;
+    }
+    out+=esc(code.slice(last));
+    return out;
+  }
+  document.querySelectorAll('.deep pre code').forEach(c=>{c.innerHTML=hl(c.textContent);});
+})();
+</script>
+</body>
+</html>
