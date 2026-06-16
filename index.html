@@ -223,7 +223,7 @@ hr.thin{border:none;border-top:1px solid var(--rule);margin:30px 0;}
       <div class="head">
         <span class="tag ml">Recommender · Built &amp; Productionized</span>
         <h3>Content Recommendation Engine</h3>
-        <p class="role">Gannett · co-occurrence / item-item collaborative filtering</p>
+        <p class="role">Digital Media · co-occurrence / item-item collaborative filtering</p>
       </div>
       <div class="body">
         <div>
@@ -273,7 +273,7 @@ def recommend(i, k=10):
     return np.argsort(-row)[:k]         # top-k most-associated items</code></pre>
           <h5>Why it's advanced / how it's tested</h5>
           <p>Sparse matrix math at catalog scale, a deliberate <b>normalization choice</b> to fight popularity bias, and a <b>cold-start fallback</b> to a popularity prior for new items. Evaluated offline with <b>Recall@K / NDCG</b>, then validated online with a CTR/engagement A/B test, the same ranking shape as a search or client–provider matching problem.</p>
-          <p class="caveat">Representative reconstruction. The production module was built at Gannett, and the code stayed there.</p>
+          <p class="caveat">Representative reconstruction. The production module was built at Digital Media, and the code stayed there.</p>
         </div>
       </details>
     </article>
@@ -285,7 +285,7 @@ def recommend(i, k=10):
       <div class="head">
         <span class="tag exp">Adaptive Experimentation · Production</span>
         <h3>Multi-Armed Bandit → Live Allocation API</h3>
-        <p class="role">Gannett · Thompson Sampling · Google Cloud Function</p>
+        <p class="role">Digital Media · Thompson Sampling · Google Cloud Function</p>
       </div>
       <div class="body">
         <div>
@@ -345,7 +345,7 @@ NormalIndPower().solve_power(effect_size=None, nobs1=n,     # did we have power?
 ci = proportion_confint(conv_b, imp_b, alpha=0.05, method='normal')  # uncertainty</code></pre>
           <h5>Why it's advanced / how it's tested</h5>
           <p>Conjugate Bayesian updating (closed-form, cheap to run every cycle), Monte-Carlo allocation, an impression→conversion delay window, and deployment as a Dockerized Cloud Function API. Tested by tracking <b>cumulative regret</b> against the always-best arm, fenced by the z-test / power / credible-interval guardrails so allocation never chases early noise.</p>
-          <p class="caveat">Condensed and lightly cleaned from the deployed Gannett module (<span class="mono">Thompson_Sampling.py</span> + the GA4 allocation query).</p>
+          <p class="caveat">Condensed and lightly cleaned from the deployed production module (<span class="mono">Thompson_Sampling.py</span> + the GA4 allocation query).</p>
         </div>
       </details>
     </article>
@@ -357,7 +357,7 @@ ci = proportion_confint(conv_b, imp_b, alpha=0.05, method='normal')  # uncertain
       <div class="head">
         <span class="tag">Validity QA · "The Broken Test"</span>
         <h3>Catching an Invalid Test</h3>
-        <p class="role">Gannett · EDM-1257 · sample-composition confound</p>
+        <p class="role">Digital Media · EDM-1257 · sample-composition confound</p>
       </div>
       <div class="body">
         <div>
@@ -407,11 +407,11 @@ assert p &gt; 0.001, "Sample-ratio mismatch; investigate before trusting the rea
       <div class="head">
         <span class="tag">Metrics Tradeoff · Confounder</span>
         <h3>Recommender Test: Engagement vs. Subscriptions</h3>
-        <p class="role">Gannett · HP4U / Taboola · EXP-0035</p>
+        <p class="role">Digital Media · HP4U / 3rd-party recsys · EXP-0035</p>
       </div>
       <div class="body">
         <div>
-          <div class="qa"><div class="q">The test</div><div class="a">Taboola's personalized homepage vs. our standard homepage, ramped to 80% of audience.</div></div>
+          <div class="qa"><div class="q">The test</div><div class="a">a third-party vendor's personalized homepage vs. our standard homepage, ramped to 80% of audience.</div></div>
           <div class="qa"><div class="q">The confounder we found</div><div class="a">Top-line pages/session looked <i>down</i>, but <b>auto-refresh pageviews</b> were inflating the control. Removing them, the variant actually had higher real page depth.</div></div>
           <div class="qa"><div class="q">How it was framed</div><div class="a">An explicit tradeoff across ad revenue, CTR, story pageviews, and subscriptions, not a single up-or-down verdict.</div></div>
           <div class="qa"><div class="q">Result</div><div class="a"><b>+48% homepage CTR</b>, ~<b>+8% downstream ad revenue (~$864K/yr)</b> against a ~<b>5% subscription dip</b>. Leadership could weigh the tradeoff with eyes open.</div></div>
@@ -461,7 +461,7 @@ ann_ad_rev = (ad_rev_var - ad_rev_ctrl) / weeks * 52   # translate lift to $/yr<
       <div class="head">
         <span class="tag causal">Causal Inference · Quasi-Experiment</span>
         <h3>Difference-in-Differences: BOGO vs. "2-For"</h3>
-        <p class="role">Molson Coors · Circle K FL · 22 test / 23 control stores</p>
+        <p class="role">Beverage CPG · FL field test · 22 test / 23 control stores</p>
       </div>
       <div class="body">
         <div>
@@ -516,7 +516,7 @@ stats.ttest_ind(control_yoy, general_yoy)   # control vs general    → signific
       <div class="head">
         <span class="tag ml">Attribution &amp; Survival</span>
         <h3>Two ways to value a decision</h3>
-        <p class="role">Gannett (MTA) · Empirical (survival curves)</p>
+        <p class="role">Digital Media (MTA) · Security ML (survival curves)</p>
       </div>
       <div class="body">
         <div>
@@ -553,7 +553,7 @@ km.fit(durations=days_to_close, event_observed=is_closed)   # censored = still o
 km.survival_function_                                       # S(t) curve</code></pre>
           <h5>Why it's advanced</h5>
           <p>Absorbing-Markov math (fundamental matrix) for removal-effect credit beats heuristic first/last-touch; right-censored survival estimation is the correct tool for "time-to-remediation," not plain regression.</p>
-          <p class="caveat">Representative reconstruction of the methods; MTA shipped at Gannett, survival work at Empirical.</p>
+          <p class="caveat">Representative reconstruction of the methods; MTA shipped in the media role; survival work in the security-ML role.</p>
         </div>
       </details>
     </article>
@@ -565,7 +565,7 @@ km.survival_function_                                       # S(t) curve</code><
       <div class="head">
         <span class="tag ml">Unsupervised &amp; Time Series</span>
         <h3>Clustering &amp; forecasting, the rigorous way</h3>
-        <p class="role">Molson Coors · pricing clusters &amp; COVID forecaster</p>
+        <p class="role">Beverage CPG · pricing clusters &amp; COVID forecaster</p>
       </div>
       <div class="body">
         <div>
@@ -618,14 +618,14 @@ best_k = max(scores, key=lambda t: t[1])[0]
       <div class="head">
         <span class="tag ml">Supervised ML · Production</span>
         <h3>Exploit Prediction Model (XGBoost)</h3>
-        <p class="role">Empirical Security · powers public EPSS + client models</p>
+        <p class="role">Security ML · powers public exploit-risk + client models</p>
       </div>
       <div class="body">
         <div>
           <div class="qa"><div class="q">What it predicts</div><div class="a">The probability a known vulnerability (CVE) will be <b>exploited within 30 days</b>, scored per vulnerability, every day.</div></div>
           <div class="qa"><div class="q">Why gradient-boosted trees</div><div class="a">Tabular, heterogeneous, missing-heavy data with thousands of features and nonlinear interactions: exactly where <b>XGBoost</b> beats linear models and needs no scaling.</div></div>
           <div class="qa"><div class="q">How it's measured</div><div class="a">Severe class imbalance (few CVEs are ever exploited) → we lean on <b>PR-AUC</b> over accuracy, with probability <b>calibration</b> since the output is a probability.</div></div>
-          <div class="qa"><div class="q">Where it ships</div><div class="a">Feeds the freely published <b>EPSS</b> scores and client-specific local models that prioritize what to patch first.</div></div>
+          <div class="qa"><div class="q">Where it ships</div><div class="a">Feeds the freely published <b>exploit-risk</b> scores and client-specific local models that prioritize what to patch first.</div></div>
         </div>
         <div>
           <div class="viz-wrap">
@@ -665,7 +665,7 @@ average_precision_score(y_test, p)        # PR-AUC, the metric that matters here
 # + coverage/efficiency (gain) curves to show exploits captured per % reviewed</code></pre>
           <h5>Why it's advanced</h5>
           <p>2,000+ features from 30+ sources, gradient boosting for nonlinear tabular interactions, imbalance handling, early stopping, and an evaluation stack built for rare events (PR-AUC, calibration, coverage/efficiency curves) rather than headline accuracy.</p>
-          <p class="caveat">Representative. The production code remains at Empirical; the scale figures are real.</p>
+          <p class="caveat">Representative. The production code remains at Security ML; the scale figures are real.</p>
         </div>
       </details>
     </article>
@@ -677,7 +677,7 @@ average_precision_score(y_test, p)        # PR-AUC, the metric that matters here
       <div class="head">
         <span class="tag ml">Data Engineering · Performance</span>
         <h3>Billion-Row Pipeline: 8h → 3.5h</h3>
-        <p class="role">Empirical Security · Spark → DuckDB · Databricks</p>
+        <p class="role">Security ML · Spark → DuckDB · Databricks</p>
       </div>
       <div class="body">
         <div>
@@ -713,8 +713,8 @@ con.execute("""
 """)
 # 8 h  (Spark, distributed shuffles)  →  3.5 h  (DuckDB, single-node columnar)</code></pre>
           <h5>Why it's advanced</h5>
-          <p>The win wasn't a faster cluster; it was recognizing the workload <i>didn't need one</i>, removing redundant passes, and adding a <b>delta build</b> so the latest month is computed incrementally on a schedule. ~2.3× faster and self-refreshing. Same "profile, then pick the right tool" instinct as parallelizing the Molson ARIMA forecaster (multiprocessing vs. Dask).</p>
-          <p class="caveat">Representative. The production code remains at Empirical; the 8h→3.5h result is real.</p>
+          <p>The win wasn't a faster cluster; it was recognizing the workload <i>didn't need one</i>, removing redundant passes, and adding a <b>delta build</b> so the latest month is computed incrementally on a schedule. ~2.3× faster and self-refreshing. Same "profile, then pick the right tool" instinct as parallelizing the Beverage CPG ARIMA forecaster (multiprocessing vs. Dask).</p>
+          <p class="caveat">Representative. The production code remains at Security ML; the 8h→3.5h result is real.</p>
         </div>
       </details>
     </article>
@@ -728,21 +728,21 @@ con.execute("""
     <h2 class="section-title">Every method, mapped to real work</h2>
     <p class="section-dek">The topics that come up in interviews, and exactly where each one was shipped.</p>
     <div class="matrix">
-      <div class="mrow"><div class="mt">A/B &amp; experimentation</div><div class="mc"><span class="proj-chip"><b>Gannett</b> HP4U/Taboola</span><span class="proj-chip"><b>Gannett</b> landing-page</span><span class="proj-chip"><b>Molson</b> Circle K</span></div></div>
-      <div class="mrow"><div class="mt">Regret min / bandits</div><div class="mc"><span class="proj-chip"><b>Gannett</b> Thompson Sampling → live API</span><span class="proj-chip">ε-greedy · UCB · TS compared</span></div></div>
-      <div class="mrow"><div class="mt">Causal inference</div><div class="mc"><span class="proj-chip"><b>Molson</b> difference-in-differences</span><span class="proj-chip"><b>Gannett</b> confound diagnosis</span></div></div>
-      <div class="mrow"><div class="mt">Gradient boosting / XGBoost</div><div class="mc"><span class="proj-chip"><b>Empirical</b> exploit model (XGBoost)</span><span class="proj-chip"><b>Molson</b> CatBoost/GBM (reference)</span></div></div>
-      <div class="mrow"><div class="mt">Recommendation / search ranking</div><div class="mc"><span class="proj-chip"><b>Gannett</b> co-occurrence ranking (BUILT)</span><span class="proj-chip"><b>Gannett</b> Taboola (evaluation)</span></div></div>
-      <div class="mrow"><div class="mt">Conversion funnel optimization</div><div class="mc"><span class="proj-chip"><b>Gannett</b> checkout-funnel investigation</span><span class="proj-chip"><b>Gannett</b> landing-page funnels</span></div></div>
-      <div class="mrow"><div class="mt">Metrics &amp; dashboards</div><div class="mc"><span class="proj-chip"><b>Gannett</b> Looker subscription analytics</span><span class="proj-chip"><b>Molson</b> R Shiny</span><span class="proj-chip">Tableau (across roles)</span></div></div>
-      <div class="mrow"><div class="mt">Survival analysis</div><div class="mc"><span class="proj-chip"><b>Empirical</b> CVE remediation curves</span></div></div>
-      <div class="mrow"><div class="mt">Decision trees / neural nets</div><div class="mc"><span class="proj-chip"><b>MillerCoors</b> applied modeling</span><span class="proj-chip"><b>Molson</b> PyTorch (reference)</span></div></div>
-      <div class="mrow"><div class="mt">Predictive / regression modeling</div><div class="mc"><span class="proj-chip"><b>Clarity</b> Caterpillar transit-time (SAS)</span><span class="proj-chip"><b>Molson</b> Ridge/Lasso/ElasticNet + GridSearchCV</span></div></div>
-      <div class="mrow"><div class="mt">Attribution &amp; MMM</div><div class="mc"><span class="proj-chip"><b>Gannett</b> Markov MTA</span><span class="proj-chip"><b>Marketing Attribution</b> top-down MMM</span></div></div>
-      <div class="mrow"><div class="mt">Model evaluation</div><div class="mc"><span class="proj-chip"><b>Empirical</b> coverage/efficiency &amp; confusion matrix</span><span class="proj-chip">PR-AUC · lift curves</span></div></div>
-      <div class="mrow"><div class="mt">Forecasting</div><div class="mc"><span class="proj-chip"><b>Molson</b> auto-ARIMA + Shiny</span><span class="proj-chip"><b>Multiply</b> Prophet bid model</span></div></div>
-      <div class="mrow"><div class="mt">Unsupervised / clustering</div><div class="mc"><span class="proj-chip"><b>Molson</b> 8-algorithm benchmark + autoencoder</span></div></div>
-      <div class="mrow"><div class="mt">Big-data engineering</div><div class="mc"><span class="proj-chip"><b>Empirical</b> Spark→DuckDB (2.3×)</span><span class="proj-chip"><b>Clarity</b> Teradata data-marts</span><span class="proj-chip"><b>Molson</b> Dask</span></div></div>
+      <div class="mrow"><div class="mt">A/B &amp; experimentation</div><div class="mc"><span class="proj-chip"><b>Digital Media</b> HP4U/3rd-party recsys</span><span class="proj-chip"><b>Digital Media</b> landing-page</span><span class="proj-chip"><b>Beverage CPG</b> geo field-test</span></div></div>
+      <div class="mrow"><div class="mt">Regret min / bandits</div><div class="mc"><span class="proj-chip"><b>Digital Media</b> Thompson Sampling → live API</span><span class="proj-chip">ε-greedy · UCB · TS compared</span></div></div>
+      <div class="mrow"><div class="mt">Causal inference</div><div class="mc"><span class="proj-chip"><b>Beverage CPG</b> difference-in-differences</span><span class="proj-chip"><b>Digital Media</b> confound diagnosis</span></div></div>
+      <div class="mrow"><div class="mt">Gradient boosting / XGBoost</div><div class="mc"><span class="proj-chip"><b>Security ML</b> exploit model (XGBoost)</span><span class="proj-chip"><b>Beverage CPG</b> CatBoost/GBM (reference)</span></div></div>
+      <div class="mrow"><div class="mt">Recommendation / search ranking</div><div class="mc"><span class="proj-chip"><b>Digital Media</b> co-occurrence ranking (BUILT)</span><span class="proj-chip"><b>Digital Media</b> 3rd-party recsys (evaluation)</span></div></div>
+      <div class="mrow"><div class="mt">Conversion funnel optimization</div><div class="mc"><span class="proj-chip"><b>Digital Media</b> checkout-funnel investigation</span><span class="proj-chip"><b>Digital Media</b> landing-page funnels</span></div></div>
+      <div class="mrow"><div class="mt">Metrics &amp; dashboards</div><div class="mc"><span class="proj-chip"><b>Digital Media</b> Looker subscription analytics</span><span class="proj-chip"><b>Beverage CPG</b> R Shiny</span><span class="proj-chip">Tableau (across roles)</span></div></div>
+      <div class="mrow"><div class="mt">Survival analysis</div><div class="mc"><span class="proj-chip"><b>Security ML</b> CVE remediation curves</span></div></div>
+      <div class="mrow"><div class="mt">Decision trees / neural nets</div><div class="mc"><span class="proj-chip"><b>Beverage CPG</b> applied modeling</span><span class="proj-chip"><b>Beverage CPG</b> PyTorch (reference)</span></div></div>
+      <div class="mrow"><div class="mt">Predictive / regression modeling</div><div class="mc"><span class="proj-chip"><b>Analytics Consulting</b> industrial-mfr transit-time (SAS)</span><span class="proj-chip"><b>Beverage CPG</b> Ridge/Lasso/ElasticNet + GridSearchCV</span></div></div>
+      <div class="mrow"><div class="mt">Attribution &amp; MMM</div><div class="mc"><span class="proj-chip"><b>Digital Media</b> Markov MTA</span><span class="proj-chip"><b>MMM Consultancy</b> top-down MMM</span></div></div>
+      <div class="mrow"><div class="mt">Model evaluation</div><div class="mc"><span class="proj-chip"><b>Security ML</b> coverage/efficiency &amp; confusion matrix</span><span class="proj-chip">PR-AUC · lift curves</span></div></div>
+      <div class="mrow"><div class="mt">Forecasting</div><div class="mc"><span class="proj-chip"><b>Beverage CPG</b> auto-ARIMA + Shiny</span><span class="proj-chip"><b>AdTech</b> Prophet bid model</span></div></div>
+      <div class="mrow"><div class="mt">Unsupervised / clustering</div><div class="mc"><span class="proj-chip"><b>Beverage CPG</b> 8-algorithm benchmark + autoencoder</span></div></div>
+      <div class="mrow"><div class="mt">Big-data engineering</div><div class="mc"><span class="proj-chip"><b>Security ML</b> Spark→DuckDB (2.3×)</span><span class="proj-chip"><b>Analytics Consulting</b> Teradata data-marts</span><span class="proj-chip"><b>Beverage CPG</b> Dask</span></div></div>
     </div>
   </div>
 </section>
@@ -754,7 +754,7 @@ con.execute("""
     <div style="margin-top:18px;">
       <span class="pill">A/B Testing &amp; Experimentation</span><span class="pill">Search Ranking &amp; Matching</span><span class="pill">Funnel / Conversion</span><span class="pill">Causal Inference (Diff-in-Diff)</span><span class="pill">Expert SQL · Python · R</span><span class="pill">Metrics &amp; Dashboards (Looker · Tableau)</span><span class="pill">Thompson Sampling</span><span class="pill">Markov Attribution</span><span class="pill">XGBoost · Power analysis · PR-AUC</span>
     </div>
-    <p class="note">Interactive portfolio · Tricia Scully · built to be explored live. Empirical figures from current role shown illustratively where the underlying code is proprietary.</p>
+    <p class="note">Interactive portfolio · Tricia Scully · built to be explored live. Figures from the current role shown illustratively where the underlying code is proprietary.</p>
   </div>
 </footer>
 
