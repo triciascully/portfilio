@@ -314,13 +314,13 @@ def recommend(i, k=10):
           <h5>The math</h5>
           <p class="mathbox">Model each variant's true conversion rate <span class="mono">θ</span> as <span class="mono">Beta(α, β)</span>. The Beta is conjugate to the Bernoulli, so after <span class="mono">s</span> conversions and <span class="mono">f</span> misses the posterior is just <span class="mono">Beta(1+s, 1+f)</span>, a closed-form update with no MCMC. Each round, one sample is drawn from each arm's posterior, routing the next users to <span class="mono">argmaxₖ θ̃ₖ</span>. Regret = <span class="mono">Σ (θ* − θ_chosen)</span>.</p>
           <h5>SQL: pull impressions &amp; conversions per variant (GA4 / BigQuery)</h5>
-          <pre><code>SELECT d190_page_ab_variant AS variant,
+          <pre><code>SELECT ab_variant AS variant,
        COUNT(DISTINCT user_id) AS impressions,
        COUNT(DISTINCT IF(first_transaction_flag = 1
-             AND d001_event_type LIKE '%product-purchase%',
+             AND event_type LIKE '%product-purchase%',
              user_id, NULL)) AS conversions
-FROM `gannett-bi-reporting...ga4_events_extracted_transformed`
-WHERE d190_page_ab_variant IN ('0066_LPRB_A', '0066_LPRB_B')
+FROM `analytics-warehouse.ga4_events`
+WHERE ab_variant IN ('variant_a', 'variant_b')
   AND DATE(TIMESTAMP_MICROS(event_timestamp)) BETWEEN @start AND @end
 GROUP BY variant;</code></pre>
           <h5>Python: posterior sampling → traffic allocation</h5>
@@ -495,7 +495,7 @@ stats.ttest_ind(test_yoy,    general_yoy)   # vs general FL         → signific
 stats.ttest_ind(control_yoy, general_yoy)   # control vs general    → significant (!)</code></pre>
           <h5>Why it's advanced / how it's tested</h5>
           <p>The honest read came from that third test: if the <b>control</b> already differs from the general baseline, it isn't a valid counterfactual, so we couldn't trust "test ≈ control = no effect." Rather than ship a null, we recommended re-selecting controls matched on <b>pre-period sales trajectory</b> (to satisfy parallel trends) before re-running.</p>
-          <p class="caveat">Condensed from the real <span class="mono">diffindiff</span> repo (<span class="mono">CircleK_FL_BOGOvs2For.py</span> + <span class="mono">ck_fl_table_code.sql</span>).</p>
+          <p class="caveat">Condensed from the real <span class="mono">diffindiff</span> repo (<span class="mono">geo_promo_test.py</span> + <span class="mono">field_test_tables.sql</span>).</p>
         </div>
       </details>
     </article>
